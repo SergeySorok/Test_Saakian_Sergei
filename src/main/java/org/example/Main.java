@@ -25,6 +25,7 @@ public class Main {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
         String filePath = bufferedReader.readLine();
+        bufferedReader.close();
         File file = new File(filePath);
         if (!file.exists()) {
             System.out.println("File not found");
@@ -34,6 +35,7 @@ public class Main {
         ObjectMapper objectMapper = new ObjectMapper();
 
         Tickets tickets = objectMapper.readValue(file, Tickets.class);
+
 
         List<Ticket> ticketsList = tickets.getTickets();
 
