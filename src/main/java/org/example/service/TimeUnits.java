@@ -1,4 +1,4 @@
-package org.example;
+package org.example.service;
 
 public enum TimeUnits {
     MILLISECOND_PER_SECOND(1000),
