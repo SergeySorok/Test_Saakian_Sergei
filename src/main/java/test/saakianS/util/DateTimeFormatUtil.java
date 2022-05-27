@@ -1,7 +1,7 @@
-package org.example.util;
+package test.saakianS.util;
 
 import lombok.experimental.UtilityClass;
-import org.example.service.TimeUnits;
+import test.saakianS.service.TimeUnits;
 
 @UtilityClass
 public class DateTimeFormatUtil {

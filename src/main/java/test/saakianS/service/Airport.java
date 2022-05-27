@@ -1,4 +1,4 @@
-package org.example.service;
+package test.saakianS.service;
 
 import lombok.Getter;
 

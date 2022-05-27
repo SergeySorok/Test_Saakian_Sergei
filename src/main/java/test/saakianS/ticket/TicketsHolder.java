@@ -1,4 +1,4 @@
-package org.example.ticket;
+package test.saakianS.ticket;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

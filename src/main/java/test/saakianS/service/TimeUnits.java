@@ -1,4 +1,4 @@
-package org.example.service;
+package test.saakianS.service;
 
 public enum TimeUnits {
     SECONDS_PER_MINUTE(60),

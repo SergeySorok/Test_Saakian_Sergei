@@ -1,10 +1,10 @@
-package org.example;
+package test.saakianS;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.service.TicketAnalyticsService;
-import org.example.ticket.TicketsHolder;
-import org.example.util.DateTimeFormatUtil;
+import test.saakianS.service.TicketAnalyticsService;
+import test.saakianS.ticket.TicketsHolder;
+import test.saakianS.util.DateTimeFormatUtil;
 
 import java.io.*;
 

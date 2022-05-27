@@ -1,7 +1,7 @@
-package org.example.service;
+package test.saakianS.service;
 
 import lombok.experimental.UtilityClass;
-import org.example.ticket.Ticket;
+import test.saakianS.ticket.Ticket;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
