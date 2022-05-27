@@ -1,38 +1,66 @@
 package org.example.service;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.example.ticket.Tickets;
+import lombok.experimental.UtilityClass;
+import org.example.ticket.Ticket;
 
-@Setter
-@Getter
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
+@UtilityClass
 public class TicketAnalyticsService {
-    Tickets tickets;
 
-    public TicketAnalyticsService(Tickets tickets) {
-        this.tickets = tickets;
+    public int getAverageFlightTimeInMinutes(List<Ticket> tickets, String departurePoint, String placeOfArrival) {
+        int allFLightTimeInMinutes = 0;
+        int requestTicketsSize = 0;
+
+        for (Ticket ticket : tickets) {
+            if (departurePoint.equals(ticket.getOrigin()) && placeOfArrival.equals(ticket.getDestination())) {
+                allFLightTimeInMinutes += getFlightTime(ticket);
+                requestTicketsSize++;
+            }
+        }
+        return allFLightTimeInMinutes / requestTicketsSize;
     }
 
-    public String percentileResult() {
-        int percentile = tickets.getPercentileInMinutes();
-        return "The flight time percentile is " + resultToString(percentile);
+    public int getPercentileInMinutes(List<Ticket> tickets, int percentile, String origin, String destination) {
+        List<Integer> flightTimeAllTickets = getAllFlightTime(tickets, origin, destination);
+        Collections.sort(flightTimeAllTickets);
+
+        int index = (int) Math.ceil(percentile / 100.0 * flightTimeAllTickets.size());
+        return flightTimeAllTickets.get(index - 1);
     }
 
-
-    public String averageFlightTime() {
-        int allTicketsTimeFlight = tickets.getAverageFlightTimeInMinutes();
-        return "The average flight time is " + resultToString(allTicketsTimeFlight);
+    private List<Integer> getAllFlightTime(List<Ticket> tickets, String origin, String destination) {
+        List<Integer> allFlightTime = new ArrayList<>();
+        for (Ticket ticket : tickets) {
+            if (origin.equals(ticket.getOrigin()) && destination.equals(ticket.getDestination())) {
+                allFlightTime.add(getFlightTime(ticket));
+            }
+        }
+        return allFlightTime;
     }
 
-    public String averageFlightTime(String departurePoint, String placeOfArrival) {
-        int allTicketsTimeFlight = tickets.getAverageFlightTimeInMinutes(departurePoint, placeOfArrival);
-        return "The average flight time between " + departurePoint + " and "
-                + placeOfArrival + " is " + resultToString(allTicketsTimeFlight);
+    private int getFlightTime(Ticket ticket) {
+        Airport departureAirport = Airport.byName(ticket.getOrigin());
+        if (departureAirport == null) {
+            throw new RuntimeException("Airport not found: " + ticket.getOrigin());
+        }
+
+        Airport arrivalAirport = Airport.byName(ticket.getDestination());
+        if (arrivalAirport == null) {
+            throw new RuntimeException("Airport not found: " + ticket.getDestination());
+        }
+
+        OffsetDateTime departureTime = LocalDateTime.of(ticket.getDepartureDate(), ticket.getDepartureTime())
+                .atOffset(departureAirport.getOffset());
+        OffsetDateTime arrivalTime = LocalDateTime.of(ticket.getArrivalDate(), ticket.getArrivalTime())
+                .atOffset(arrivalAirport.getOffset());
+
+        return (int) Duration.between(departureTime, arrivalTime).getSeconds() / TimeUnits.SECONDS_PER_MINUTE.getTimeUnits();
     }
 
-    private String resultToString(int minutes) {
-        return minutes / TimeUnits.MINUTES_PER_HOUR.getTimeUnits() + " hours "
-                + minutes % TimeUnits.MINUTES_PER_HOUR.getTimeUnits() + " min.";
-    }
 }
